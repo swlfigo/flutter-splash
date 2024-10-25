@@ -75,42 +75,57 @@ class _MainPageState extends State<MainPage>
         child: Container(
             alignment: Alignment.bottomLeft,
             height: MediaQuery.of(context).padding.top + MainPageTopGap,
-            child: Obx(() {
-              if (mainCtl.selectedTopicIndex.value < 0) {
-                return const Center(
-                  child: Text("No Data"),
-                );
-              }
-
-              pages = mainCtl.topicList.value
-                  .map((topicModel) => MainTopicPage(topic: topicModel))
-                  .toList();
-
-              tabC = TabController(
-                  length: pages.length,
-                  vsync: this,
-                  initialIndex: mainCtl.selectedTopicIndex.value);
-
-              return TabBar(
-                  dividerColor: Colors.transparent,
-                  dividerHeight: 0,
-                  indicatorColor: Colors.white,
-                  isScrollable: true,
-                  controller: tabC,
-                  tabAlignment: TabAlignment.start,
-                  onTap: (index) {
-                    pageC.jumpToPage(index);
-                    mainCtl.onTabbarSelected(index);
-                  },
-                  tabs: List.generate(pages.length, (index) {
-                    return Tab(
-                      child: Text(
-                        mainCtl.topicList.value[index].title,
-                        style: const TextStyle(color: Colors.white),
-                      ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(bottom: 15),
+                  child: Text(
+                    "Unsplash",
+                    style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  ),
+                ),
+                Obx(() {
+                  if (mainCtl.selectedTopicIndex.value < 0) {
+                    return const Center(
+                      child: Text("No Data"),
                     );
-                  }));
-            })),
+                  }
+
+                  pages = mainCtl.topicList.value
+                      .map((topicModel) => MainTopicPage(topicM: topicModel))
+                      .toList();
+
+                  tabC = TabController(
+                      length: pages.length,
+                      vsync: this,
+                      initialIndex: mainCtl.selectedTopicIndex.value);
+
+                  return TabBar(
+                      dividerColor: Colors.transparent,
+                      dividerHeight: 0,
+                      indicatorColor: Colors.white,
+                      isScrollable: true,
+                      controller: tabC,
+                      tabAlignment: TabAlignment.start,
+                      onTap: (index) {
+                        pageC.jumpToPage(index);
+                        mainCtl.onTabbarSelected(index);
+                      },
+                      tabs: List.generate(pages.length, (index) {
+                        return Tab(
+                          child: Text(
+                            mainCtl.topicList.value[index].title,
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        );
+                      }));
+                }),
+              ],
+            )),
       )
     ]);
   }
