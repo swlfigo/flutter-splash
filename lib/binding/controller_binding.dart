@@ -6,7 +6,6 @@ class AllControllerBinding implements Bindings {
   void dependencies() {
     // TODO: implement dependencies
     print("Binding Dependencies");
-    Get.lazyPut<MainModuleController>(() => MainModuleController());
     Get.lazyPut<MainModuleTopicController>(() => MainModuleTopicController());
   }
 }

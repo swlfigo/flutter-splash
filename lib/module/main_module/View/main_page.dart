@@ -49,7 +49,7 @@ class _MainPageState extends State<MainPage>
             return const LoadingIndicator();
           }
 
-          if (mainCtl.topicList.isEmpty) {
+          if (mainCtl.topicList.value.isEmpty) {
             return const Center(child: Text("Empty Data"));
           }
 
@@ -76,11 +76,20 @@ class _MainPageState extends State<MainPage>
             alignment: Alignment.bottomLeft,
             height: MediaQuery.of(context).padding.top + MainPageTopGap,
             child: Obx(() {
-              pages = mainCtl.topicList
+              if (mainCtl.selectedTopicIndex.value < 0) {
+                return const Center(
+                  child: Text("No Data"),
+                );
+              }
+
+              pages = mainCtl.topicList.value
                   .map((topicModel) => MainTopicPage(topic: topicModel))
                   .toList();
 
-              tabC = TabController(length: pages.length, vsync: this);
+              tabC = TabController(
+                  length: pages.length,
+                  vsync: this,
+                  initialIndex: mainCtl.selectedTopicIndex.value);
 
               return TabBar(
                   dividerColor: Colors.transparent,
@@ -91,11 +100,12 @@ class _MainPageState extends State<MainPage>
                   tabAlignment: TabAlignment.start,
                   onTap: (index) {
                     pageC.jumpToPage(index);
+                    mainCtl.onTabbarSelected(index);
                   },
                   tabs: List.generate(pages.length, (index) {
                     return Tab(
                       child: Text(
-                        mainCtl.topicList[index].title,
+                        mainCtl.topicList.value[index].title,
                         style: const TextStyle(color: Colors.white),
                       ),
                     );
