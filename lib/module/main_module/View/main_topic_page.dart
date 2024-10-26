@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -87,9 +88,12 @@ class _MainTopicPageState extends State<MainTopicPage>
                 width: double.infinity,
                 height: double.infinity,
                 child: imageURL != null
-                    ? Image.network(
-                        imageURL ?? "",
+                    ? CachedNetworkImage(
+                        imageUrl: imageURL ?? "",
                         fit: BoxFit.cover,
+                        errorWidget: (context, url, error) {
+                          return const Icon(Icons.error);
+                        },
                       )
                     : Container()),
             SizedBox(

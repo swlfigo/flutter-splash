@@ -10,6 +10,7 @@ class UnSplashImageInfo {
   int width;
   int height;
   int likes;
+  String? color;
 
   @JsonKey(name: "alt_description")
   String altDescription;

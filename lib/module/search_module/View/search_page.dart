@@ -1,5 +1,6 @@
 import 'dart:ffi';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -109,8 +110,12 @@ class _SearchPageState extends State<SearchPage>
     return ListView.builder(
       itemCount: searchCtrl.searchPhotosResults.length,
       itemBuilder: (BuildContext context, int index) {
-        return Image.network(
-          searchCtrl.searchPhotosResults[index].urls?.small ?? "",
+        return CachedNetworkImage(
+          imageUrl: searchCtrl.searchPhotosResults[index].urls?.small ?? "",
+          fit: BoxFit.cover,
+          errorWidget: (context, url, error) {
+            return const Icon(Icons.error);
+          },
         );
       },
     );
@@ -155,9 +160,12 @@ class _SearchPageState extends State<SearchPage>
                       if (imageURL == null) {
                         return Container();
                       }
-                      return Image.network(
-                        imageURL,
+                      return CachedNetworkImage(
+                        imageUrl: imageURL,
                         fit: BoxFit.cover,
+                        errorWidget: (context, url, error) {
+                          return const Icon(Icons.error);
+                        },
                       );
                     },
                   ),
@@ -208,13 +216,15 @@ class _SearchPageState extends State<SearchPage>
                 Row(
                   children: [
                     ClipOval(
-                      child: Image.network(
-                        width: 60,
-                        height: 60,
-                        userInfo.profileImage.medium,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+                        child: CachedNetworkImage(
+                      width: 60,
+                      height: 60,
+                      imageUrl: userInfo.profileImage.medium,
+                      fit: BoxFit.cover,
+                      errorWidget: (context, url, error) {
+                        return const Icon(Icons.error);
+                      },
+                    )),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Column(

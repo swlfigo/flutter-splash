@@ -1,5 +1,6 @@
 import 'dart:ffi';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:splash/model/unsplash_image_model.dart';
 
@@ -19,13 +20,13 @@ class HomeUnsplashImageInfoCell extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               HomeCellImageWidgetInfo(imageInfo: uImageInfo),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
                 child: Text(
-                  uImageInfo.altDescription ?? "",
+                  uImageInfo.altDescription,
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.inversePrimary,
                   ),
@@ -37,16 +38,19 @@ class HomeUnsplashImageInfoCell extends StatelessWidget {
                 child: Row(
                   children: [
                     ClipRRect(
-                      borderRadius: BorderRadius.circular(40),
-                      child: Image.network(
-                        uImageInfo.user?.profileImage?.small ?? "",
-                      ),
-                    ),
-                    SizedBox(
+                        borderRadius: BorderRadius.circular(40),
+                        child: CachedNetworkImage(
+                          imageUrl: uImageInfo.user.profileImage.small,
+                          fit: BoxFit.cover,
+                          errorWidget: (context, url, error) {
+                            return const Icon(Icons.error);
+                          },
+                        )),
+                    const SizedBox(
                       width: 10,
                     ),
                     Text(
-                      uImageInfo.user?.username ?? "",
+                      uImageInfo.user.username,
                       style: TextStyle(
                           color: Theme.of(context).colorScheme.inversePrimary),
                     ),
@@ -89,12 +93,16 @@ class HomeCellImageWidgetInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return AspectRatio(
       aspectRatio: imageInfo.width > imageInfo.height ? 16 / 9 : 9 / 16,
-      child: Container(
+      child: SizedBox(
         width: double.infinity,
         child: FittedBox(
           fit: BoxFit.cover,
-          child: Image.network(
-            imageInfo.urls?.small ?? "",
+          child: CachedNetworkImage(
+            imageUrl: imageInfo.urls?.small ?? "",
+            fit: BoxFit.cover,
+            errorWidget: (context, url, error) {
+              return const Icon(Icons.error);
+            },
           ),
         ),
       ),
