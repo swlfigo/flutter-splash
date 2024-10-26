@@ -54,11 +54,11 @@ class HomeUnsplashImageInfoCell extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.favorite_border,
                           size: 15,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 3,
                         ),
                         Text(
@@ -67,7 +67,7 @@ class HomeUnsplashImageInfoCell extends StatelessWidget {
                               color:
                                   Theme.of(context).colorScheme.inversePrimary),
                         ),
-                        SizedBox(width: 5),
+                        const SizedBox(width: 5),
                       ],
                     )
                   ],
@@ -88,7 +88,7 @@ class HomeCellImageWidgetInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
-      aspectRatio: imageInfo.width! > imageInfo.height! ? 16 / 9 : 9 / 16,
+      aspectRatio: imageInfo.width > imageInfo.height ? 16 / 9 : 9 / 16,
       child: Container(
         width: double.infinity,
         child: FittedBox(

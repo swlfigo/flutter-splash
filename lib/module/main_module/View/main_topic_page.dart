@@ -7,11 +7,9 @@ import 'package:splash/component/home_cell.dart';
 import 'package:splash/component/loading_indicator.dart';
 import 'package:splash/component/utils/colors_ext.dart';
 import 'package:splash/component/utils/const_var.dart';
-import 'package:splash/model/unsplash_image_model.dart';
 import 'package:splash/module/main_module/Controller/main_topic_controller.dart';
 import 'package:splash/module/main_module/Model/topic_model.dart';
 import 'package:splash/module/main_module/View/main_cell.dart';
-import 'package:splash/net/api.dart';
 
 class MainTopicPage extends StatefulWidget {
   final TopicModel topicM;
@@ -137,58 +135,3 @@ class _MainTopicPageState extends State<MainTopicPage>
     );
   }
 }
-  
-
-
-
-//  ListView.builder(
-//               padding: EdgeInsets.zero,
-//               itemCount: imageInfos.length + 1,
-//               itemBuilder: (context, index) {
-//                 if (index == 0) {
-//                   return Builder(builder: (BuildContext context) {
-//                     var imageURL;
-//                     if (imageInfos.isEmpty == false) {
-//                       imageURL = imageInfos[0].urls?.regular;
-//                     }
-
-//                     return ConstrainedBox(
-//                       constraints: BoxConstraints(
-//                           maxWidth: double.infinity,
-//                           maxHeight: MediaQuery.of(context).padding.top +
-//                               MainPageTopGap * 3),
-//                       child: Container(
-//                         clipBehavior: Clip.hardEdge,
-//                         decoration: BoxDecoration(color: HexColor("111111")),
-//                         child: Stack(
-//                           children: [
-//                             SizedBox(
-//                               width: double.infinity,
-//                               height: double.infinity,
-//                               child: Image.network(
-//                                 imageURL ?? "",
-//                                 fit: BoxFit.cover,
-//                               ),
-//                             ),
-//                             SizedBox(
-//                               width: double.infinity,
-//                               height: double.infinity,
-//                               child: BackdropFilter(
-//                                 filter: ImageFilter.blur(
-//                                     sigmaX: 20.0, sigmaY: 20.0),
-//                                 child: Container(
-//                                   color:
-//                                       Colors.black.withOpacity(0.6), // 添加半透明遮罩
-//                                 ),
-//                               ),
-//                             )
-//                           ],
-//                         ),
-//                       ),
-//                     );
-//                   });
-//                 }
-
-//                 int actualIndex = index - 1;
-//                 return MainPagePhotoCell(imageInfo: imageInfos[actualIndex]);
-//               });

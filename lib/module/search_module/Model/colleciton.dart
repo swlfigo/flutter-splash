@@ -1,5 +1,4 @@
 import 'dart:ffi';
-
 import 'package:json_annotation/json_annotation.dart';
 import 'package:splash/module/search_module/Model/users.dart';
 
@@ -53,8 +52,10 @@ class UnsplashCollectionCoverPhotoPreviewPhoto {
 @JsonSerializable()
 class UnsplashCollectionCoverPhotoPreviewPhotoUrl {
   String thumb;
-
-  UnsplashCollectionCoverPhotoPreviewPhotoUrl(this.thumb);
+  String small;
+  String regular;
+  UnsplashCollectionCoverPhotoPreviewPhotoUrl(
+      this.thumb, this.small, this.regular);
 
   factory UnsplashCollectionCoverPhotoPreviewPhotoUrl.fromJson(
           Map<String, dynamic> json) =>
