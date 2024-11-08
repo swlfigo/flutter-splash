@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:splash/component/home_cell.dart';
+
 import 'package:splash/component/loading_indicator.dart';
+import 'package:splash/component/placeholder/placeholder.dart';
 import 'package:splash/component/utils/colors_ext.dart';
 import 'package:splash/component/utils/const_var.dart';
 import 'package:splash/model/unsplash_image_model.dart';
@@ -41,7 +42,7 @@ class _MainPageState extends State<MainPage>
     return Stack(children: [
       Container(
         decoration: BoxDecoration(
-          color: HexColor("111111"),
+          color: getGlobalBackGroundColor(),
         ),
         child: Obx(() {
           if (mainCtl.isLoading.value) {
@@ -90,9 +91,7 @@ class _MainPageState extends State<MainPage>
                 ),
                 Obx(() {
                   if (mainCtl.selectedTopicIndex.value < 0) {
-                    return const Center(
-                      child: Text("No Data"),
-                    );
+                    return Container();
                   }
 
                   pages = mainCtl.topicList.value

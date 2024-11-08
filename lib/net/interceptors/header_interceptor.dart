@@ -10,9 +10,20 @@ class HeaderInterceptors extends InterceptorsWrapper {
 
     options.headers.addAll({
       "Content-Type": "application/json",
-      "Authorization": "Client-ID ${dotenv.env["ClientID"]}"
+      'Accept': 'application/json',
     });
+    if (!options.headers.containsKey("Authorization") &&
+            !options.path.contains('topic')
 
+        // &&
+        //     options.path.contains('users/swlfigo')
+        ) {
+      //Common Request
+      options.headers
+          .addAll({"Authorization": "Client-ID ${dotenv.env["ClientID"]}"});
+    } else {
+      //Ignore
+    }
     return super.onRequest(options, handler);
   }
 }

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
+import 'package:get/get.dart';
 import 'package:splash/module/main_module/View/main_page.dart';
 import 'package:splash/module/search_module/View/search_page.dart';
-import 'package:splash/pages/user/user_page.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:splash/module/user/Service/user_service.dart';
+import 'package:splash/module/user/View/user_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,14 +15,32 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   PageController controller = PageController(initialPage: 0);
-
+  final UserService _userService = Get.find<UserService>();
   int _selectedPage = 0;
-  List<Widget> pages = [const MainPage(), const SearchPage(), const UserPage()];
+  late List<Widget> pages;
   List<BottomNavigationBarItem> barItems = const [
     BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
     BottomNavigationBarItem(icon: Icon(Icons.search), label: "Search"),
     BottomNavigationBarItem(icon: Icon(Icons.person), label: "User")
   ];
+
+  @override
+  void initState() {
+    pages = generatePages();
+    super.initState();
+  }
+
+  List<Widget> generatePages() {
+    List<Widget> ws = [];
+    ws.add(const MainPage());
+    ws.add(const SearchPage());
+    ws.add(UserPage(
+      userName: _userService.userAuthInfo.value?.userName,
+      userID: _userService.userAuthInfo.value?.userID,
+      isMainPageUserModule: true,
+    ));
+    return ws;
+  }
 
   void _pageChange(int index) {
     if (index != _selectedPage) {
@@ -43,7 +62,7 @@ class _HomePageState extends State<HomePage> {
           return pages[index];
         },
         controller: controller,
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         itemCount: pages.length,
         onPageChanged: (int index) {
           if (index != _selectedPage) {

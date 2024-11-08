@@ -6,9 +6,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:splash/component/home_cell.dart';
 import 'package:splash/component/loading_indicator.dart';
+import 'package:splash/component/segment_control/segement_control.dart';
+import 'package:splash/component/user_collection/user_collection.dart';
 import 'package:splash/component/utils/colors_ext.dart';
+import 'package:splash/component/utils/const_var.dart';
 import 'package:splash/model/unsplash_image_model.dart';
 import 'package:splash/module/search_module/Controller/search_controller.dart';
 import 'package:splash/module/search_module/Model/colleciton.dart';
@@ -36,9 +38,9 @@ class _SearchPageState extends State<SearchPage>
     super.build(context);
     print("Search Page Build");
     return Scaffold(
-        backgroundColor: HexColor("111111"),
+        backgroundColor: getGlobalBackGroundColor(),
         appBar: AppBar(
-          backgroundColor: HexColor("111111"),
+          backgroundColor: getGlobalBackGroundColor(),
           title: _buildTitleSearchBar(),
           scrolledUnderElevation: 0,
         ),
@@ -56,27 +58,16 @@ class _SearchPageState extends State<SearchPage>
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxHeight: 30),
-                  child: CustomSlidingSegmentedControl(
-                    children: const <int, Widget>{
+                  child: ComponentSegmentControl(
+                    onChange: onSegmentControlChange,
+                    initialIndex: searchCtrl.selectedSegementIndex.value,
+                    segmentTitle: const {
                       0: Text(
                         "Photos",
                         style: TextStyle(color: Colors.white),
                       ),
                       1: Text("Collections"),
                       2: Text("Users"),
-                    },
-                    thumbDecoration: BoxDecoration(
-                      color: HexColor("636368"),
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: HexColor("29292c"),
-                    ),
-                    initialValue: searchCtrl.selectedSegementIndex.value,
-                    onValueChanged: (index) {
-                      print("SegmenControl Selected Index: $index");
-                      searchCtrl.onSegmentChanged(index);
                     },
                   ),
                 ),
@@ -87,6 +78,10 @@ class _SearchPageState extends State<SearchPage>
             ],
           );
         }));
+  }
+
+  void onSegmentControlChange(int index) {
+    searchCtrl.onSegmentChanged(index);
   }
 
   Widget _buildList() {
@@ -132,66 +127,7 @@ class _SearchPageState extends State<SearchPage>
         UnsplashCollectionInfo collectionInfo =
             searchCtrl.searchCollectionResults[index];
 
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: Container(
-              decoration: BoxDecoration(
-                color: HexColor("1c1c1c"),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3, childAspectRatio: 1),
-                    itemCount: collectionInfo.previewPhotos == null
-                        ? 0
-                        : collectionInfo.previewPhotos!.length > 3
-                            ? 3
-                            : collectionInfo.previewPhotos!.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final imageURL =
-                          collectionInfo.previewPhotos?[index].urls?.thumb;
-                      if (imageURL == null) {
-                        return Container();
-                      }
-                      return CachedNetworkImage(
-                        imageUrl: imageURL,
-                        fit: BoxFit.cover,
-                        errorWidget: (context, url, error) {
-                          return const Icon(Icons.error);
-                        },
-                      );
-                    },
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5, left: 8, bottom: 10),
-                    child: Text(
-                      collectionInfo.title,
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                        '${collectionInfo.totalPhotos} photos · Curated by ${collectionInfo.user.name}'),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
+        return UserCollectionWidget(collectionInfo: collectionInfo);
       },
     );
   }
@@ -205,43 +141,38 @@ class _SearchPageState extends State<SearchPage>
       itemBuilder: (BuildContext context, int index) {
         UnsplashUserInfo userInfo = searchCtrl.searchUsersResults[index];
 
-        return Container(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  children: [
-                    ClipOval(
-                        child: CachedNetworkImage(
-                      width: 60,
-                      height: 60,
-                      imageUrl: userInfo.profileImage.medium,
-                      fit: BoxFit.cover,
-                      errorWidget: (context, url, error) {
-                        return const Icon(Icons.error);
-                      },
-                    )),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(userInfo.name),
-                          Text(userInfo.username)
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-              ],
-            ),
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  ClipOval(
+                      child: CachedNetworkImage(
+                    width: 60,
+                    height: 60,
+                    imageUrl: userInfo.profileImage.medium,
+                    fit: BoxFit.cover,
+                    errorWidget: (context, url, error) {
+                      return const Icon(Icons.error);
+                    },
+                  )),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [Text(userInfo.name), Text(userInfo.username)],
+                    ),
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+            ],
           ),
         );
       },

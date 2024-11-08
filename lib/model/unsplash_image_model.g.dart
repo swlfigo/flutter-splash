@@ -17,7 +17,7 @@ UnSplashImageInfo _$UnSplashImageInfoFromJson(Map<String, dynamic> json) =>
       (json['width'] as num).toInt(),
       (json['height'] as num).toInt(),
       (json['likes'] as num).toInt(),
-      json['alt_description'] as String,
+      json['alt_description'] as String?,
     )..color = json['color'] as String?;
 
 Map<String, dynamic> _$UnSplashImageInfoToJson(UnSplashImageInfo instance) =>

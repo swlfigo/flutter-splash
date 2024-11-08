@@ -2,6 +2,6 @@ class DataResult {
   Object? data;
   bool result;
   Function? next;
-
-  DataResult(this.data, this.result, {this.next});
+  Object? error;
+  DataResult(this.data, this.result, this.error, {this.next});
 }

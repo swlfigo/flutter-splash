@@ -4,7 +4,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:splash/component/home_cell.dart';
 import 'package:splash/component/loading_indicator.dart';
 import 'package:splash/component/utils/colors_ext.dart';
 import 'package:splash/component/utils/const_var.dart';
@@ -80,7 +79,7 @@ class _MainTopicPageState extends State<MainTopicPage>
           maxHeight: MediaQuery.of(context).padding.top + MainPageTopGap * 3),
       child: Container(
         clipBehavior: Clip.hardEdge,
-        decoration: BoxDecoration(color: HexColor("111111")),
+        decoration: BoxDecoration(color: getGlobalBackGroundColor()),
         child: Stack(
           alignment: Alignment.bottomLeft,
           children: [

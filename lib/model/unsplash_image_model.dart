@@ -13,7 +13,7 @@ class UnSplashImageInfo {
   String? color;
 
   @JsonKey(name: "alt_description")
-  String altDescription;
+  String? altDescription;
 
   UnsplashCollectionCoverPhotoPreviewPhotoUrl? urls;
   UnsplashUserInfo user;

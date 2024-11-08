@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:splash/component/utils/colors_ext.dart';
+import 'package:splash/component/utils/const_var.dart';
 import 'package:splash/model/unsplash_image_model.dart';
 
 class MainPagePhotoCell extends StatelessWidget {
@@ -17,7 +18,7 @@ class MainPagePhotoCell extends StatelessWidget {
           return ColoredBox(
               color: imageInfo.color != null
                   ? HexColor(imageInfo.color!)
-                  : HexColor("111111"));
+                  : getGlobalBackGroundColor());
         },
         errorWidget: (context, url, error) {
           return const Icon(Icons.error);
