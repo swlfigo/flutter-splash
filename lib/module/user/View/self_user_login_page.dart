@@ -59,7 +59,7 @@ class _SelfUserLoginPageState extends State<SelfUserLoginPage> {
     await webCtrl.clearCache();
     await webCtrl.clearLocalStorage();
 
-    // await WebViewCookieManager().clearCookies();
+    await WebViewCookieManager().clearCookies();
   }
 
   @override
