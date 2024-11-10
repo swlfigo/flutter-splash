@@ -12,8 +12,10 @@ class HeaderInterceptors extends InterceptorsWrapper {
       "Content-Type": "application/json",
       'Accept': 'application/json',
     });
-    if (!options.headers.containsKey("Authorization") &&
-            !options.path.contains('topic')
+    if (!options.headers.containsKey("Authorization")
+
+        // &&
+        //         !options.path.contains('topic')
 
         // &&
         //     options.path.contains('users/swlfigo')

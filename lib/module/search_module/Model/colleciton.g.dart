@@ -71,6 +71,8 @@ UnsplashCollectionCoverPhotoPreviewPhotoUrl
           json['thumb'] as String,
           json['small'] as String,
           json['regular'] as String,
+          json['full'] as String,
+          json['raw'] as String,
         );
 
 Map<String, dynamic> _$UnsplashCollectionCoverPhotoPreviewPhotoUrlToJson(
@@ -79,4 +81,6 @@ Map<String, dynamic> _$UnsplashCollectionCoverPhotoPreviewPhotoUrlToJson(
       'thumb': instance.thumb,
       'small': instance.small,
       'regular': instance.regular,
+      'full': instance.full,
+      'raw': instance.raw,
     };

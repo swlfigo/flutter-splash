@@ -54,8 +54,11 @@ class UnsplashCollectionCoverPhotoPreviewPhotoUrl {
   String thumb;
   String small;
   String regular;
+  String full;
+  String raw;
+
   UnsplashCollectionCoverPhotoPreviewPhotoUrl(
-      this.thumb, this.small, this.regular);
+      this.thumb, this.small, this.regular, this.full, this.raw);
 
   factory UnsplashCollectionCoverPhotoPreviewPhotoUrl.fromJson(
           Map<String, dynamic> json) =>

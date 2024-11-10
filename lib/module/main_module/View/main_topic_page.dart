@@ -2,11 +2,12 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
 import 'package:get/get.dart';
 import 'package:splash/component/loading_indicator.dart';
-import 'package:splash/component/utils/colors_ext.dart';
+
 import 'package:splash/component/utils/const_var.dart';
+import 'package:splash/module/image_module/View/image_detail.dart';
 import 'package:splash/module/main_module/Controller/main_topic_controller.dart';
 import 'package:splash/module/main_module/Model/topic_model.dart';
 import 'package:splash/module/main_module/View/main_cell.dart';
@@ -61,8 +62,14 @@ class _MainTopicPageState extends State<MainTopicPage>
             return _buildPlaceHolderWidget();
           }
           int actualIndex = index - 1;
-          return MainPagePhotoCell(
-              imageInfo: topicCtrl.imageInfos[actualIndex]);
+          return GestureDetector(
+            onTap: () {
+              Get.to(() => ImageDetailPage(
+                  imageInfo: topicCtrl.imageInfos[actualIndex]));
+            },
+            child:
+                MainPagePhotoCell(imageInfo: topicCtrl.imageInfos[actualIndex]),
+          );
         },
       );
     });

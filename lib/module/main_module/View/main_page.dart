@@ -1,15 +1,10 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 
 import 'package:splash/component/loading_indicator.dart';
-import 'package:splash/component/placeholder/placeholder.dart';
-import 'package:splash/component/utils/colors_ext.dart';
+
 import 'package:splash/component/utils/const_var.dart';
-import 'package:splash/model/unsplash_image_model.dart';
+
 import 'package:splash/module/main_module/View/main_topic_page.dart';
 
 import '../Controller/main_module_controller.dart';
