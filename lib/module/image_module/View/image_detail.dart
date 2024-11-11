@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:splash/component/utils/const_var.dart';
 import 'package:splash/model/unsplash_image_model.dart';
+import 'package:splash/module/image_module/Controller/image_detail_controller.dart';
+import 'package:splash/module/image_module/View/image_exif.dart';
 
 class ImageDetailPage extends StatefulWidget {
   const ImageDetailPage({super.key, required this.imageInfo});
@@ -17,9 +19,13 @@ class _ImageDetailPageState extends State<ImageDetailPage> {
   bool _isImageScaled = false;
   bool _isPannelHidden = false;
   double? photoViewInitialScale;
+  late ImageDetailController _imageController;
   @override
   void initState() {
     super.initState();
+    _imageController = Get.put<ImageDetailController>(
+        ImageDetailController(widget.imageInfo.id),
+        tag: widget.imageInfo.id);
     _photoViewController = PhotoViewController()
       ..outputStateStream.listen((state) {
         setState(() {
@@ -56,99 +62,125 @@ class _ImageDetailPageState extends State<ImageDetailPage> {
                     backgroundDecoration: BoxDecoration(
                       color: getGlobalBackGroundColor(),
                     )),
-                Opacity(
+                AnimatedOpacity(
                   opacity: _isPannelHidden ? 0 : 1,
-                  child: Stack(children: [
-                    //Pannel
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Column(
+                  duration: const Duration(milliseconds: 150),
+                  child: IgnorePointer(
+                    ignoring: _isPannelHidden == true,
+                    child: Stack(children: [
+                      //Pannel
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Padding(
+                                    padding: const EdgeInsets.only(left: 10),
+                                    child: generateImageDetailWidget()),
+                                SafeArea(child: Container())
+                              ]),
+                          Column(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              const Padding(
-                                padding: EdgeInsets.only(left: 10),
-                                child: Icon(
-                                  Icons.info,
-                                  color: Colors.white,
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: RawMaterialButton(
+                                  onPressed: () {},
+                                  shape: const CircleBorder(),
+                                  padding: const EdgeInsets.all(10.0),
+                                  fillColor: Colors.black.withOpacity(0.6),
+                                  child: const Icon(
+                                      size: 30,
+                                      Icons.favorite,
+                                      color: Colors.white),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: RawMaterialButton(
+                                  onPressed: () {},
+                                  shape: const CircleBorder(),
+                                  padding: const EdgeInsets.all(10.0),
+                                  fillColor: Colors.black.withOpacity(0.6),
+                                  child: const Icon(
+                                      size: 30, Icons.add, color: Colors.white),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8),
+                                child: RawMaterialButton(
+                                  onPressed: () {},
+                                  shape: const CircleBorder(),
+                                  padding: const EdgeInsets.all(10.0),
+                                  fillColor: Colors.black.withOpacity(0.6),
+                                  child: const Icon(
+                                      size: 35,
+                                      Icons.download_rounded,
+                                      color: Colors.white),
                                 ),
                               ),
                               SafeArea(child: Container())
-                            ]),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: RawMaterialButton(
-                                onPressed: () {},
-                                shape: const CircleBorder(),
-                                padding: const EdgeInsets.all(10.0),
-                                fillColor: Colors.black.withOpacity(0.6),
-                                child: const Icon(
-                                    size: 30,
-                                    Icons.favorite,
-                                    color: Colors.white),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: RawMaterialButton(
-                                onPressed: () {},
-                                shape: const CircleBorder(),
-                                padding: const EdgeInsets.all(10.0),
-                                fillColor: Colors.black.withOpacity(0.6),
-                                child: const Icon(
-                                    size: 30, Icons.add, color: Colors.white),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 8),
-                              child: RawMaterialButton(
-                                onPressed: () {},
-                                shape: const CircleBorder(),
-                                padding: const EdgeInsets.all(10.0),
-                                fillColor: Colors.black.withOpacity(0.6),
-                                child: const Icon(
-                                    size: 35,
-                                    Icons.download_rounded,
-                                    color: Colors.white),
-                              ),
-                            ),
-                            SafeArea(child: Container())
-                          ],
-                        )
-                      ],
-                    ),
+                            ],
+                          )
+                        ],
+                      ),
 
-                    SafeArea(
-                      child: Container(
-                        height: kToolbarHeight,
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Row(
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.arrow_back),
-                              onPressed: () => Get.back(),
-                            ),
-                            Expanded(
-                              child: Center(
-                                child: Text(
-                                  widget.imageInfo.user.name,
-                                  style: const TextStyle(
-                                      fontSize: 18, color: Colors.white),
+                      SafeArea(
+                        child: Container(
+                          height: kToolbarHeight,
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Row(
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.arrow_back),
+                                onPressed: () => Get.back(),
+                              ),
+                              Expanded(
+                                child: Center(
+                                  child: Text(
+                                    widget.imageInfo.user.name,
+                                    style: const TextStyle(
+                                        fontSize: 18, color: Colors.white),
+                                  ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(width: 48),
-                          ],
+                              const SizedBox(width: 48),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ]),
+                    ]),
+                  ),
                 )
               ],
             )));
+  }
+
+  Widget generateImageDetailWidget() {
+    return Obx(() {
+      if (_imageController.detailImageInfo.value != null) {
+        return GestureDetector(
+          onTap: () {
+            //Show Image Info
+            showModalBottomSheet(
+              scrollControlDisabledMaxHeightRatio: 0.95,
+              context: context,
+              backgroundColor: Colors.black.withOpacity(0.9),
+              builder: (context) {
+                return ImageDetailExifPage(
+                    imageInfo: _imageController.detailImageInfo.value!);
+              },
+            );
+          },
+          child: const Icon(
+            Icons.info,
+            color: Colors.white,
+          ),
+        );
+      }
+      return Container();
+    });
   }
 }

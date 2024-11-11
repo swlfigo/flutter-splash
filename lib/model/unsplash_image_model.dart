@@ -15,6 +15,11 @@ class UnSplashImageInfo {
   @JsonKey(name: "alt_description")
   String? altDescription;
 
+  @JsonKey(name: "created_at")
+  String? createdAt;
+
+  UnsplashImageInfoExif? exif;
+
   UnsplashCollectionCoverPhotoPreviewPhotoUrl? urls;
   UnsplashUserInfo user;
   UnSplashImageInfo(this.id, this.urls, this.user, this.width, this.height,
@@ -23,4 +28,22 @@ class UnSplashImageInfo {
   factory UnSplashImageInfo.fromJson(Map<String, dynamic> json) =>
       _$UnSplashImageInfoFromJson(json);
   Map<String, dynamic> toJson() => _$UnSplashImageInfoToJson(this);
+}
+
+@JsonSerializable()
+class UnsplashImageInfoExif {
+  String? make;
+  String? model;
+  String? name;
+  @JsonKey(name: "exposure_time")
+  String? exposureTime;
+  UnsplashImageInfoExif();
+  String? aperture;
+  @JsonKey(name: "focal_length")
+  String? focalLength;
+  int? iso;
+
+  factory UnsplashImageInfoExif.fromJson(Map<String, dynamic> json) =>
+      _$UnsplashImageInfoExifFromJson(json);
+  Map<String, dynamic> toJson() => _$UnsplashImageInfoExifToJson(this);
 }

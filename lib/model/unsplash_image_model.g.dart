@@ -18,7 +18,13 @@ UnSplashImageInfo _$UnSplashImageInfoFromJson(Map<String, dynamic> json) =>
       (json['height'] as num).toInt(),
       (json['likes'] as num).toInt(),
       json['alt_description'] as String?,
-    )..color = json['color'] as String?;
+    )
+      ..color = json['color'] as String?
+      ..createdAt = json['created_at'] as String?
+      ..exif = json['exif'] == null
+          ? null
+          : UnsplashImageInfoExif.fromJson(
+              json['exif'] as Map<String, dynamic>);
 
 Map<String, dynamic> _$UnSplashImageInfoToJson(UnSplashImageInfo instance) =>
     <String, dynamic>{
@@ -28,6 +34,31 @@ Map<String, dynamic> _$UnSplashImageInfoToJson(UnSplashImageInfo instance) =>
       'likes': instance.likes,
       'color': instance.color,
       'alt_description': instance.altDescription,
+      'created_at': instance.createdAt,
+      'exif': instance.exif,
       'urls': instance.urls,
       'user': instance.user,
+    };
+
+UnsplashImageInfoExif _$UnsplashImageInfoExifFromJson(
+        Map<String, dynamic> json) =>
+    UnsplashImageInfoExif()
+      ..make = json['make'] as String?
+      ..model = json['model'] as String?
+      ..name = json['name'] as String?
+      ..exposureTime = json['exposure_time'] as String?
+      ..aperture = json['aperture'] as String?
+      ..focalLength = json['focal_length'] as String?
+      ..iso = (json['iso'] as num?)?.toInt();
+
+Map<String, dynamic> _$UnsplashImageInfoExifToJson(
+        UnsplashImageInfoExif instance) =>
+    <String, dynamic>{
+      'make': instance.make,
+      'model': instance.model,
+      'name': instance.name,
+      'exposure_time': instance.exposureTime,
+      'aperture': instance.aperture,
+      'focal_length': instance.focalLength,
+      'iso': instance.iso,
     };
