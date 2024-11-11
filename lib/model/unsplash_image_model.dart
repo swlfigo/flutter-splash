@@ -19,6 +19,7 @@ class UnSplashImageInfo {
   String? createdAt;
 
   UnsplashImageInfoExif? exif;
+  UnsplashImageInfoLinks? links;
 
   UnsplashCollectionCoverPhotoPreviewPhotoUrl? urls;
   UnsplashUserInfo user;
@@ -46,4 +47,20 @@ class UnsplashImageInfoExif {
   factory UnsplashImageInfoExif.fromJson(Map<String, dynamic> json) =>
       _$UnsplashImageInfoExifFromJson(json);
   Map<String, dynamic> toJson() => _$UnsplashImageInfoExifToJson(this);
+}
+
+@JsonSerializable()
+class UnsplashImageInfoLinks {
+  String self;
+  String html;
+  String download;
+  @JsonKey(name: "download_location")
+  String downloadLocation;
+
+  UnsplashImageInfoLinks(
+      this.self, this.html, this.download, this.downloadLocation);
+
+  factory UnsplashImageInfoLinks.fromJson(Map<String, dynamic> json) =>
+      _$UnsplashImageInfoLinksFromJson(json);
+  Map<String, dynamic> toJson() => _$UnsplashImageInfoLinksToJson(this);
 }

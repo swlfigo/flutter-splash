@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:splash/component/utils/const_var.dart';
 import 'package:splash/model/unsplash_image_model.dart';
 import 'package:splash/module/image_module/Controller/image_detail_controller.dart';
@@ -130,7 +133,7 @@ class _ImageDetailPageState extends State<ImageDetailPage> {
                       SafeArea(
                         child: Container(
                           height: kToolbarHeight,
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: Row(
                             children: [
                               IconButton(
@@ -146,7 +149,16 @@ class _ImageDetailPageState extends State<ImageDetailPage> {
                                   ),
                                 ),
                               ),
-                              const SizedBox(width: 48),
+                              IconButton(
+                                onPressed: () => _onShare(
+                                    context,
+                                    Uri.parse(
+                                        widget.imageInfo.links?.html ?? "")),
+                                icon: const Icon(
+                                  Icons.ios_share,
+                                  color: Colors.white,
+                                ),
+                              )
                             ],
                           ),
                         ),
@@ -156,6 +168,25 @@ class _ImageDetailPageState extends State<ImageDetailPage> {
                 )
               ],
             )));
+  }
+
+  void _onShare(BuildContext context, Uri? uri) async {
+    log("Will Share HTML URL:$uri");
+    // A builder is used to retrieve the context immediately
+    // surrounding the ElevatedButton.
+    //
+    // The context's `findRenderObject` returns the first
+    // RenderObject in its descendent tree when it's not
+    // a RenderObjectWidget. The ElevatedButton's RenderObject
+    // has its position and size after it's built.
+    final box = context.findRenderObject() as RenderBox?;
+
+    if (uri != null) {
+      await Share.shareUri(
+        uri,
+        sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
+      );
+    }
   }
 
   Widget generateImageDetailWidget() {

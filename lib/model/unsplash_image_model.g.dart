@@ -23,8 +23,11 @@ UnSplashImageInfo _$UnSplashImageInfoFromJson(Map<String, dynamic> json) =>
       ..createdAt = json['created_at'] as String?
       ..exif = json['exif'] == null
           ? null
-          : UnsplashImageInfoExif.fromJson(
-              json['exif'] as Map<String, dynamic>);
+          : UnsplashImageInfoExif.fromJson(json['exif'] as Map<String, dynamic>)
+      ..links = json['links'] == null
+          ? null
+          : UnsplashImageInfoLinks.fromJson(
+              json['links'] as Map<String, dynamic>);
 
 Map<String, dynamic> _$UnSplashImageInfoToJson(UnSplashImageInfo instance) =>
     <String, dynamic>{
@@ -36,6 +39,7 @@ Map<String, dynamic> _$UnSplashImageInfoToJson(UnSplashImageInfo instance) =>
       'alt_description': instance.altDescription,
       'created_at': instance.createdAt,
       'exif': instance.exif,
+      'links': instance.links,
       'urls': instance.urls,
       'user': instance.user,
     };
@@ -61,4 +65,22 @@ Map<String, dynamic> _$UnsplashImageInfoExifToJson(
       'aperture': instance.aperture,
       'focal_length': instance.focalLength,
       'iso': instance.iso,
+    };
+
+UnsplashImageInfoLinks _$UnsplashImageInfoLinksFromJson(
+        Map<String, dynamic> json) =>
+    UnsplashImageInfoLinks(
+      json['self'] as String,
+      json['html'] as String,
+      json['download'] as String,
+      json['download_location'] as String,
+    );
+
+Map<String, dynamic> _$UnsplashImageInfoLinksToJson(
+        UnsplashImageInfoLinks instance) =>
+    <String, dynamic>{
+      'self': instance.self,
+      'html': instance.html,
+      'download': instance.download,
+      'download_location': instance.downloadLocation,
     };
