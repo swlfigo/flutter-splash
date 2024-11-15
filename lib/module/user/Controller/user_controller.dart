@@ -28,6 +28,12 @@ class UserController extends GetxController {
     }
   }
 
+  void setUpUserName(String? userName) {
+    if (userName != null) {
+      _userName = userName;
+    }
+  }
+
   var selectedSegementIndex = (0).obs;
 
   RxList<UnSplashImageInfo> userPhotos = RxList<UnSplashImageInfo>([]);
@@ -91,7 +97,10 @@ class UserController extends GetxController {
       return;
     }
     var res = await httpManager.netFetch(
-        "https://api.unsplash.com/users/${_userName}/likes", null, null, null);
+        "https://api.unsplash.com/users/${_userName}/likes",
+        null,
+        {"need_auth": true},
+        null);
     if (res != null && res.data != null) {
       userLikes.value = (res.data as List<dynamic>)
           .map((item) =>

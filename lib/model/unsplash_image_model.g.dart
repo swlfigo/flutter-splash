@@ -21,6 +21,7 @@ UnSplashImageInfo _$UnSplashImageInfoFromJson(Map<String, dynamic> json) =>
     )
       ..color = json['color'] as String?
       ..createdAt = json['created_at'] as String?
+      ..likeByUser = json['liked_by_user'] as bool?
       ..exif = json['exif'] == null
           ? null
           : UnsplashImageInfoExif.fromJson(json['exif'] as Map<String, dynamic>)
@@ -38,6 +39,7 @@ Map<String, dynamic> _$UnSplashImageInfoToJson(UnSplashImageInfo instance) =>
       'color': instance.color,
       'alt_description': instance.altDescription,
       'created_at': instance.createdAt,
+      'liked_by_user': instance.likeByUser,
       'exif': instance.exif,
       'links': instance.links,
       'urls': instance.urls,

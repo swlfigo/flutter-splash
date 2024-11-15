@@ -22,7 +22,10 @@ class ImageDetailController extends GetxController {
   void fetchImageInfo() async {
     try {
       var res = await httpManager.netFetch(
-          'https://api.unsplash.com/photos/$imagePicID', null, null, null);
+          'https://api.unsplash.com/photos/$imagePicID',
+          null,
+          {"need_auth": true},
+          null);
       if (res != null && res.data != null) {
         detailImageInfo.value =
             UnSplashImageInfo.fromJson(res.data as Map<String, dynamic>);

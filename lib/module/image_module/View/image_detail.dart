@@ -90,15 +90,28 @@ class _ImageDetailPageState extends State<ImageDetailPage> {
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: RawMaterialButton(
-                                  onPressed: () {},
-                                  shape: const CircleBorder(),
-                                  padding: const EdgeInsets.all(10.0),
-                                  fillColor: Colors.black.withOpacity(0.6),
-                                  child: const Icon(
-                                      size: 30,
-                                      Icons.favorite,
-                                      color: Colors.white),
-                                ),
+                                    onPressed: () {},
+                                    shape: const CircleBorder(),
+                                    padding: const EdgeInsets.all(10.0),
+                                    fillColor: Colors.black.withOpacity(0.6),
+                                    child: Obx(() {
+                                      if (_imageController
+                                                  .detailImageInfo.value !=
+                                              null &&
+                                          _imageController.detailImageInfo
+                                                  .value!.likeByUser ==
+                                              true) {
+                                        return const Icon(
+                                            size: 30,
+                                            Icons.favorite_outlined,
+                                            color: Colors.white);
+                                      }
+
+                                      return const Icon(
+                                          size: 30,
+                                          Icons.favorite_border,
+                                          color: Colors.white);
+                                    })),
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),

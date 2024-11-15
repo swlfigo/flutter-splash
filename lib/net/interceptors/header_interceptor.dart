@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:get/get.dart';
+import 'package:splash/module/user/Service/user_service.dart';
 
 class HeaderInterceptors extends InterceptorsWrapper {
   @override
@@ -25,6 +27,16 @@ class HeaderInterceptors extends InterceptorsWrapper {
           .addAll({"Authorization": "Client-ID ${dotenv.env["ClientID"]}"});
     } else {
       //Ignore
+    }
+
+    if (options.headers.containsKey("need_auth")) {
+      var userService = Get.find<UserService>();
+      if (userService.isLogined.value) {
+        options.headers.addAll({
+          "Authorization":
+              "Bearer ${userService.userAuthInfo.value!.accessToken}"
+        });
+      }
     }
     return super.onRequest(options, handler);
   }

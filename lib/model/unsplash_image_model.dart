@@ -18,6 +18,9 @@ class UnSplashImageInfo {
   @JsonKey(name: "created_at")
   String? createdAt;
 
+  @JsonKey(name: "liked_by_user")
+  bool? likeByUser;
+
   UnsplashImageInfoExif? exif;
   UnsplashImageInfoLinks? links;
 

@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -6,6 +7,7 @@ import 'package:splash/component/placeholder/placeholder.dart';
 import 'package:splash/component/segment_control/segement_control.dart';
 import 'package:splash/component/user_collection/user_collection.dart';
 import 'package:splash/component/utils/const_var.dart';
+import 'package:splash/module/image_module/View/image_detail.dart';
 import 'package:splash/module/main_module/View/main_cell.dart';
 import 'package:splash/module/search_module/Model/colleciton.dart';
 import 'package:splash/module/user/Controller/user_controller.dart';
@@ -67,6 +69,8 @@ class _UserPageState extends State<UserPage>
     _scrollController.addListener(_onScroll);
     if (widget.isMainPageUserModule) {
       _userCtrl.userInfo.value = _userService.userInfo.value;
+      _userCtrl.setUpUserID(_userService.userAuthInfo.value?.userID);
+      _userCtrl.setUpUserName(_userService.userAuthInfo.value?.userName);
       // 监听登录状态
       ever(_userService.isLogined, (_) {
         if (_userService.isLogined.value) {
@@ -215,7 +219,13 @@ class _UserPageState extends State<UserPage>
         }
         return SliverList.builder(
             itemBuilder: (context, index) {
-              return MainPagePhotoCell(imageInfo: _userCtrl.userPhotos[index]);
+              return GestureDetector(
+                  onTap: () {
+                    Get.to(() => ImageDetailPage(
+                        imageInfo: _userCtrl.userPhotos[index]));
+                  },
+                  child: MainPagePhotoCell(
+                      imageInfo: _userCtrl.userPhotos[index]));
             },
             itemCount: _userCtrl.userPhotos.length);
       } else if (_userCtrl.selectedSegementIndex.value == 1) {
@@ -224,7 +234,13 @@ class _UserPageState extends State<UserPage>
         }
         return SliverList.builder(
             itemBuilder: (context, index) {
-              return MainPagePhotoCell(imageInfo: _userCtrl.userLikes[index]);
+              return GestureDetector(
+                  onTap: () {
+                    Get.to(() =>
+                        ImageDetailPage(imageInfo: _userCtrl.userLikes[index]));
+                  },
+                  child:
+                      MainPagePhotoCell(imageInfo: _userCtrl.userLikes[index]));
             },
             itemCount: _userCtrl.userLikes.length);
       } else if (_userCtrl.selectedSegementIndex.value == 2) {
