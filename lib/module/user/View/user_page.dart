@@ -43,7 +43,7 @@ class _UserPageState extends State<UserPage>
     return false;
   }
 
-  late UserController _userCtrl;
+  UserController? _userCtrl;
 
   final UserService _userService = Get.find<UserService>();
 
@@ -62,29 +62,41 @@ class _UserPageState extends State<UserPage>
 
   @override
   void initState() {
-    _userCtrl = Get.put<UserController>(UserController(),
-        tag: widget.isMainPageUserModule
-            ? "main_module_user_ctrl"
-            : widget.userID);
     _scrollController.addListener(_onScroll);
     if (widget.isMainPageUserModule) {
-      _userCtrl.userInfo.value = _userService.userInfo.value;
-      _userCtrl.setUpUserID(_userService.userAuthInfo.value?.userID);
-      _userCtrl.setUpUserName(_userService.userAuthInfo.value?.userName);
+      if (_userService.isLogined.value) {
+        _userCtrl = Get.put<UserController>(
+            UserController(_userService.userAuthInfo.value!.userName,
+                _userService.userAuthInfo.value!.userID!),
+            tag: "main_module_user_ctrl");
+      } else {
+        //Create User Ctrl Later
+      }
       // 监听登录状态
       ever(_userService.isLogined, (_) {
         if (_userService.isLogined.value) {
           //Set User ID;Fetch UserInfo
-
-          _userCtrl.setUpUserID(_userService.userAuthInfo.value?.userID);
+          _userCtrl = Get.put<UserController>(
+              UserController(_userService.userAuthInfo.value!.userName,
+                  _userService.userAuthInfo.value!.userID!),
+              tag: "main_module_user_ctrl");
         } else {
-          //Clean User Info
-          _userCtrl.userInfo.value = null;
+          _logoutMethod();
         }
       });
+    } else {
+      _userCtrl = Get.put<UserController>(
+          UserController(widget.userName!, widget.userID!),
+          tag: widget.userID);
     }
 
     super.initState();
+  }
+
+  void _logoutMethod() {
+    //Clean User Info
+    Get.delete<UserController>(tag: "main_module_user_ctrl");
+    _userCtrl = null;
   }
 
   @override
@@ -183,7 +195,7 @@ class _UserPageState extends State<UserPage>
                       alignment: Alignment.center,
                       child: ComponentSegmentControl(
                         onChange: onSegmentControlValueChange,
-                        initialIndex: _userCtrl.selectedSegementIndex.value,
+                        initialIndex: _userCtrl!.selectedSegementIndex.value,
                         segmentTitle: const {
                           0: Text(
                             "Photos",
@@ -208,13 +220,13 @@ class _UserPageState extends State<UserPage>
   }
 
   void onSegmentControlValueChange(int index) {
-    _userCtrl.onSegmentChanged(index);
+    _userCtrl!.onSegmentChanged(index);
   }
 
   Widget _buildDataList() {
     return Obx(() {
-      if (_userCtrl.selectedSegementIndex.value == 0) {
-        if (_userCtrl.userPhotos.isEmpty) {
+      if (_userCtrl!.selectedSegementIndex.value == 0) {
+        if (_userCtrl!.userPhotos.isEmpty) {
           return _buildPlaceHolderWidget('No Photos');
         }
         return SliverList.builder(
@@ -222,39 +234,39 @@ class _UserPageState extends State<UserPage>
               return GestureDetector(
                   onTap: () {
                     Get.to(() => ImageDetailPage(
-                        imageInfo: _userCtrl.userPhotos[index]));
+                        imageInfo: _userCtrl!.userPhotos[index]));
                   },
                   child: MainPagePhotoCell(
-                      imageInfo: _userCtrl.userPhotos[index]));
+                      imageInfo: _userCtrl!.userPhotos[index]));
             },
-            itemCount: _userCtrl.userPhotos.length);
-      } else if (_userCtrl.selectedSegementIndex.value == 1) {
-        if (_userCtrl.userLikes.isEmpty) {
+            itemCount: _userCtrl!.userPhotos.length);
+      } else if (_userCtrl!.selectedSegementIndex.value == 1) {
+        if (_userCtrl!.userLikes.isEmpty) {
           return _buildPlaceHolderWidget('No Likes');
         }
         return SliverList.builder(
             itemBuilder: (context, index) {
               return GestureDetector(
                   onTap: () {
-                    Get.to(() =>
-                        ImageDetailPage(imageInfo: _userCtrl.userLikes[index]));
+                    Get.to(() => ImageDetailPage(
+                        imageInfo: _userCtrl!.userLikes[index]));
                   },
-                  child:
-                      MainPagePhotoCell(imageInfo: _userCtrl.userLikes[index]));
+                  child: MainPagePhotoCell(
+                      imageInfo: _userCtrl!.userLikes[index]));
             },
-            itemCount: _userCtrl.userLikes.length);
-      } else if (_userCtrl.selectedSegementIndex.value == 2) {
-        if (_userCtrl.userCollections.isEmpty) {
+            itemCount: _userCtrl!.userLikes.length);
+      } else if (_userCtrl!.selectedSegementIndex.value == 2) {
+        if (_userCtrl!.userCollections.isEmpty) {
           return _buildPlaceHolderWidget('No Collections');
         }
         return SliverList.builder(
             itemBuilder: (context, index) {
               UnsplashCollectionInfo collectionInfo =
-                  _userCtrl.userCollections[index];
+                  _userCtrl!.userCollections[index];
 
               return UserCollectionWidget(collectionInfo: collectionInfo);
             },
-            itemCount: _userCtrl.userCollections.length);
+            itemCount: _userCtrl!.userCollections.length);
       }
       return Container();
     });
@@ -320,7 +332,7 @@ class _UserPageState extends State<UserPage>
                       onTap: () {
                         //Logout
                         _userService.logout();
-                        _userCtrl.logout();
+                        _logoutMethod();
                       },
                       child: const Icon(
                         Icons.logout,

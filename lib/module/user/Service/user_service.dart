@@ -56,6 +56,9 @@ class UserService extends GetxService {
   }
 
   Future logout() async {
+    LocalStorage.remove(UserAuthInfoAccessKey);
+    LocalStorage.remove(UserAuthInfoID);
+    LocalStorage.remove(UserAuthInfoUserName);
     isLogined.value = false;
     userAuthInfo.value = null;
     userInfo.value = null;

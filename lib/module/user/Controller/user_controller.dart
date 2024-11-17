@@ -9,29 +9,19 @@ import 'package:splash/module/search_module/Model/users.dart';
 import 'package:splash/net/api.dart';
 
 class UserController extends GetxController {
-  String? _userName;
-  String? _userID;
+  String userName;
+  String userID;
+
+  UserController(this.userName, this.userID);
+
   Rx<UnsplashUserInfo?> userInfo = Rx<UnsplashUserInfo?>(null);
 
   @override
   void onInit() {
-    if (_userID != null) {
+    if (userID != "") {
       fetchUserData();
     }
     super.onInit();
-  }
-
-  void setUpUserID(String? userID) {
-    if (userID != null) {
-      _userID = userID;
-      fetchUserInfo();
-    }
-  }
-
-  void setUpUserName(String? userName) {
-    if (userName != null) {
-      _userName = userName;
-    }
   }
 
   var selectedSegementIndex = (0).obs;
@@ -44,7 +34,7 @@ class UserController extends GetxController {
   @override
   void onClose() {
     // TODO: implement onClose
-    log("User Controller Closed,UserID:$_userID,UserName:$_userName");
+    log("User Controller Closed,UserID:$userID,UserName:$userName");
     super.onClose();
   }
 
@@ -58,11 +48,16 @@ class UserController extends GetxController {
   }
 
   Future _fetchUserPhotos() async {
-    if (_userName == null) {
+    if (userName == "") {
+      log("Empty User Name To Fetch User Photos");
+      return;
+    }
+    if (userPhotos.isNotEmpty) {
+      log("User Photots Not Empty,No Need Req");
       return;
     }
     var res = await httpManager.netFetch(
-        "https://api.unsplash.com/users/${_userName}/photos", null, null, null);
+        "https://api.unsplash.com/users/${userName}/photos", null, null, null);
     if (res != null && res.data != null) {
       userPhotos.value = (res.data as List<dynamic>)
           .map((item) =>
@@ -72,11 +67,16 @@ class UserController extends GetxController {
   }
 
   Future _fetchUserCollection() async {
-    if (_userName == null) {
+    if (userName == "") {
+      log("Empty User Name To Fetch User Photos");
+      return;
+    }
+    if (userCollections.isNotEmpty) {
+      log("User Collection Not Empty,No Need Req");
       return;
     }
     var res = await httpManager.netFetch(
-        "https://api.unsplash.com/users/${_userName}/collections",
+        "https://api.unsplash.com/users/${userName}/collections",
         null,
         null,
         null);
@@ -93,11 +93,16 @@ class UserController extends GetxController {
   }
 
   Future _fetchUserLiked() async {
-    if (_userName == null) {
+    if (userName == "") {
+      log("Empty User Name To Fetch User Photos");
+      return;
+    }
+    if (userLikes.isNotEmpty) {
+      log("User Likes Not Empty,No Need Req");
       return;
     }
     var res = await httpManager.netFetch(
-        "https://api.unsplash.com/users/${_userName}/likes",
+        "https://api.unsplash.com/users/${userName}/likes",
         null,
         {"need_auth": true},
         null);
@@ -114,7 +119,8 @@ class UserController extends GetxController {
   }
 
   Future fetchUserInfo() async {
-    if (_userID == null) {
+    if (userID == "") {
+      log("Empty User ID To Fetch User Photos");
       return;
     }
 
@@ -130,7 +136,7 @@ class UserController extends GetxController {
 
       //Get Public Info
       var res = await httpManager.netFetch(
-          'https://api.unsplash.com/users/${_userID!}', null, null, null);
+          'https://api.unsplash.com/users/${userID!}', null, null, null);
       if (res != null && res.data != null) {
         userInfo.value =
             UnsplashUserInfo.fromJson(res.data as Map<String, dynamic>);
