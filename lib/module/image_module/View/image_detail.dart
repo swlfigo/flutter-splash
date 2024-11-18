@@ -29,12 +29,24 @@ class _ImageDetailPageState extends State<ImageDetailPage> {
     _imageController = Get.put<ImageDetailController>(
         ImageDetailController(widget.imageInfo.id),
         tag: widget.imageInfo.id);
+    fetchImageDetail();
     _photoViewController = PhotoViewController()
       ..outputStateStream.listen((state) {
         setState(() {
           _isImageScaled = state.scale != null && state.scale! > 1.0;
         });
       });
+  }
+
+  void fetchImageDetail() {
+    //Detail Image Info model contains exif info
+    if (widget.imageInfo.exif == null) {
+      _imageController.fetchImageInfo((detailImageInfo) {
+        //Replace The Image Info
+        widget.imageInfo.exif = detailImageInfo.exif;
+      });
+      log("Fetching Image Detail");
+    }
   }
 
   @override
@@ -203,28 +215,27 @@ class _ImageDetailPageState extends State<ImageDetailPage> {
   }
 
   Widget generateImageDetailWidget() {
-    return Obx(() {
-      if (_imageController.detailImageInfo.value != null) {
-        return GestureDetector(
-          onTap: () {
-            //Show Image Info
-            showModalBottomSheet(
-              scrollControlDisabledMaxHeightRatio: 0.95,
-              context: context,
-              backgroundColor: Colors.black.withOpacity(0.9),
-              builder: (context) {
-                return ImageDetailExifPage(
-                    imageInfo: _imageController.detailImageInfo.value!);
-              },
-            );
+    return GestureDetector(
+      onTap: () {
+        if (widget.imageInfo.exif == null) {
+          fetchImageDetail();
+          return;
+        }
+
+        //Show Image Info
+        showModalBottomSheet(
+          scrollControlDisabledMaxHeightRatio: 0.95,
+          context: context,
+          backgroundColor: Colors.black.withOpacity(0.9),
+          builder: (context) {
+            return ImageDetailExifPage(imageInfo: widget.imageInfo);
           },
-          child: const Icon(
-            Icons.info,
-            color: Colors.white,
-          ),
         );
-      }
-      return Container();
-    });
+      },
+      child: const Icon(
+        Icons.info,
+        color: Colors.white,
+      ),
+    );
   }
 }

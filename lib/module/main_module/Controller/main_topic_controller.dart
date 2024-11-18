@@ -20,7 +20,10 @@ class MainTopicListController extends GetxController {
     isLoading.value = true;
     try {
       var res = await httpManager.netFetch(
-          'https://api.unsplash.com/topics/${topic}/photos', null, null, null);
+          'https://api.unsplash.com/topics/${topic}/photos',
+          null,
+          {"need_auth": true},
+          null);
       if (res != null && res.data != null) {
         imageInfos.value = (res.data as List<dynamic>)
             .map((item) =>

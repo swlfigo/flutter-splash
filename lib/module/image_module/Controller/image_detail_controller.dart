@@ -12,14 +12,8 @@ class ImageDetailController extends GetxController {
 
   Rx<UnSplashImageInfo?> detailImageInfo = Rx<UnSplashImageInfo?>(null);
 
-  @override
-  void onInit() {
-    // TODO: implement onInit
-    super.onInit();
-    fetchImageInfo();
-  }
-
-  void fetchImageInfo() async {
+  void fetchImageInfo(
+      void Function(UnSplashImageInfo imageDetailInfo)? callback) async {
     try {
       var res = await httpManager.netFetch(
           'https://api.unsplash.com/photos/$imagePicID',
@@ -27,8 +21,12 @@ class ImageDetailController extends GetxController {
           {"need_auth": true},
           null);
       if (res != null && res.data != null) {
-        detailImageInfo.value =
+        var detailInfo =
             UnSplashImageInfo.fromJson(res.data as Map<String, dynamic>);
+        detailImageInfo.value = detailInfo;
+        if (callback != null) {
+          callback(detailInfo);
+        }
       }
     } catch (e) {
       log("Fetch Image Detail Error,ID:$imagePicID,Error:$e");
