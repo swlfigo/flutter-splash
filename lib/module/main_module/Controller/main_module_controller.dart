@@ -9,11 +9,6 @@ class MainModuleTopicController extends GetxController {
   final selectedTopicIndex = (-1).obs;
 
   var isLoading = true.obs;
-  @override
-  void onInit() {
-    // TODO: implement onInit
-    super.onInit();
-  }
 
   @override
   void onReady() {

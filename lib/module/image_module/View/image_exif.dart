@@ -75,13 +75,13 @@ class ImageDetailExifPage extends StatelessWidget {
   Widget _buildCamearaInfo() {
     var dString = DateTime.parse(imageInfo.createdAt ?? "");
     var imageInfoMap = [
-      {"Make": imageInfo.exif?.make},
-      {"Focal Length (mm)": imageInfo.exif?.focalLength ?? ""},
-      {"Model": imageInfo.exif?.model},
-      {"ISO": imageInfo.exif?.iso.toString()},
-      {"Shutter Speed (s)": imageInfo.exif?.exposureTime},
+      {"Make": imageInfo.exif?.make ?? "-"},
+      {"Focal Length (mm)": imageInfo.exif?.focalLength ?? "-"},
+      {"Model": imageInfo.exif?.model ?? "-"},
+      {"ISO": imageInfo.exif?.iso.toString() ?? "-"},
+      {"Shutter Speed (s)": imageInfo.exif?.exposureTime ?? "-"},
       {"Dimensions": "${imageInfo.width} x ${imageInfo.height}"},
-      {"Aperture (f)": imageInfo.exif?.aperture ?? ""},
+      {"Aperture (f)": imageInfo.exif?.aperture ?? "-"},
       {"Published": "${dString.month} ${dString.day},${dString.year}"},
     ];
 

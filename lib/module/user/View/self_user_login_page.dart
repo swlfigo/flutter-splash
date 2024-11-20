@@ -121,7 +121,7 @@ class _SelfUserLoginPageState extends State<SelfUserLoginPage> {
         path: 'oauth/authorize',
         queryParameters: {
           'client_id': dotenv.env["ClientID"],
-          'scope': 'public+read_user+write_user',
+          'scope': 'public+read_user+write_user+write_likes',
           'response_type': 'code',
           'redirect_uri': 'fluttersplash://authed'
         }).toString().replaceAll("%2B", "+"));
